@@ -1,10 +1,10 @@
 {
     "chromeWebSecurity": false,
-    "projectId": "c6r52n",
+    "projectId": "projectId",
     "env": {
         "loginURL":"https://identity.apaleo-staging.com/Account/Login",
-        "email": "apae2etests+9cf41bgyl@gmail.com",
-        "password": "2kJ2K}m3>pAtuxHAm9rFFyEJ",
+        "email": "email",
+        "password": "password",
         "selectedHotel": "Hotel Berlin"
     }
 }
