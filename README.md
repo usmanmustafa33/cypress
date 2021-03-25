@@ -11,6 +11,7 @@ for jenkins
 create a free account at cypress(https://dashboard.cypress.io/signup)
 
 create project in cypress and put projectId in `cypress.json`
+
 run `npx cypress run --record --key GET_KEY_IN_CYPRESS_PROJECT`
 
 
