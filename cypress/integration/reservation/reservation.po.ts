@@ -12,20 +12,11 @@ export class Reservation {
 
         cy.navigateToModule('Reservations')
 
-        cy
-        .get('.mat-button')
-        .contains('New booking')
-        .click()
+        cy.clickMatButton('New booking')
 
-        cy.setDateRangePicker(
-            moment(new Date()),
-            moment(new Date()).add(10, 'days')
-        )
+        cy.setDateRangePicker(moment(new Date()), moment(new Date()).add(10, 'days'))
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Search offers')
-        .click()
+        cy.clickMatRaisedButton('Search offers')
 
         // select the given unit group
         cy.get('mat-row')
@@ -59,35 +50,21 @@ export class Reservation {
             })
         })
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Continue')
-        .click()
+        cy.clickMatRaisedButton('Continue')
 
         //Booker Form
-        cy.get('input[formcontrolname="firstName"]')
-        .type(bookingData.firstName)
-        cy.get('input[formcontrolname="lastName"]')
-        .type(bookingData.lastName)
+        cy.formControlName('firstName', bookingData.firstName)
+        cy.formControlName('lastName', bookingData.lastName)
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Continue')
-        .click()
+        cy.clickMatRaisedButton('Continue')
 
         //Payment Form
         cy.fillPaymentForm('Verify');
 
         cy.wait(3000)
-        cy
-        .get('.mat-raised-button')
-        .contains('Create booking')
-        .click()
+        cy.clickMatRaisedButton('Create booking')
 
         cy.snackBarMessage(`The booking for ${bookingData.lastName} has been created successfully.`)
-        
-        //cy.url().should('include', '/reservations?status=Confirmed&status=InHouse')
-        // cy.get('.main-info').contains('First Name Last Name');
     }
 
     public goToReservation(guestName: string) {
@@ -96,38 +73,23 @@ export class Reservation {
         cy.navigateToModule('Reservations')
         cy.wait(1000);
 
-        cy.get('input[formcontrolname="textSearch"]')
-        .type(guestName)
+        cy.formControlName('textSearch', guestName)
 
         cy.wait(1000);
         
         cy.get('mat-row')
         .contains(guestName)
         .click();
-
-        // cy.url().should('include', `/actions`)
-        // cy.get('.main-info').contains(guestName);
     }    
 
     public addReservationExtras(serviceName: string) {
-        cy
-        .get('.mat-button')
-        .contains("Add service")
-        .click()
+        cy.clickMatButton('Add service')
 
         cy.wait(1000)
 
-        cy
-        .get(`apa-select-filter[formcontrolname="serviceOffer"]`)
-        .click()
-        .get('mat-option')
-        .contains(serviceName)
-        .click()
+        cy.apaSelectFilterSelect('serviceOffer', serviceName);
 
-        cy
-        .get('.mat-raised-button')
-        .contains("Add")
-        .click()
+        cy.clickMatRaisedButton('Add')
 
         cy.snackBarMessage('has been updated successfully.')
     }
@@ -147,15 +109,9 @@ export class Reservation {
             })
         })
 
-        cy
-        .get('.mat-menu-item')
-        .contains('Delete')
-        .click()
+        cy.matMenuItemClick('Delete')
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Yes')
-        .click()
+        cy.clickMatRaisedButton('Yes')
     }
 
     public updateFolioBillingAddress() {
@@ -175,86 +131,58 @@ export class Reservation {
         .get('.folio-billing-address')
         .click()
 
-        cy
-        .get('input[formcontrolname="addressLine1"]')
-        .clear()
-        .type(billingAddress.addressLine1)
+        cy.formControlName('addressLine1', billingAddress.addressLine1)
+        cy.formControlName('addressLine2', billingAddress.addressLine2)
+        cy.formControlName('postalCode', billingAddress.postalCode)
+        cy.formControlName('city', billingAddress.city)
+        cy.formControlName('countryCode', billingAddress.countryCode)
 
-        cy
-        .get('input[formcontrolname="addressLine2"]')
-        .clear()
-        .type(billingAddress.addressLine2)
 
-        cy
-        .get('input[formcontrolname="postalCode"]')
-        .clear()
-        .type(billingAddress.postalCode)
-
-        cy
-        .get('input[formcontrolname="city"]')
-        .clear()
-        .type(billingAddress.city)
-
-        cy
-        .get('input[formcontrolname="countryCode"]')
-        .clear()
-        .type(billingAddress.countryCode)
-
-        cy
-        .get('.mat-raised-button')
-        .contains("Save")
-        .click()
+        cy.clickMatRaisedButton('Save')
     }
 
     public addChargesToFolio(service: string) {
-        cy
-        .get('.mat-button')
-        .contains("Add charge")
-        .click()
+        cy.clickMatButton('Add charge')
+        cy.matMenuItemClick('Charge')
+    
+        cy.apaSelectFilterSelect("Find or define a charge", service, 'searchplaceholder')
 
-        cy
-        .get('.mat-menu-item')
-        .contains("Charge")
-        .click()
+        cy.clickMatRaisedButton('Add')
 
-        cy
-        .get('apa-select-filter[searchplaceholder="Find or define a charge"]')
-        .click()
-        .get('mat-option')
-        .contains(service)
-        .click()
+        cy.wait(2000)
 
-        cy
-        .get('.mat-raised-button')
-        .contains("Add")
-        .click()
-
-        cy.wait(1000)
+        cy.snackBarMessage(`The charge "${'TEST'}" has been added to the folio`)
     }
 
     public addPaymentToFolio() {
-        const paymentDetail = {
-            primaryMethod:   'Other Payment Method',
-            amount: 15
-        };
+        const amount = 15;
+
+        cy.clickMatButton('Add payment')
 
         cy
-        .get('.mat-button')
-        .contains("Add payment")
+        .get('.mat-ripple')
+        .contains("Other")
         .click()
-        
-        cy.matSelectInput('primaryMethod', paymentDetail.primaryMethod)
 
-        cy.get('input[formcontrolname="amount"]')
-        .clear()
-        .type(paymentDetail.amount.toString())
+        cy.clickMatRaisedButton('Next')
 
         cy
-        .get('.mat-raised-button')
-        .contains("Add")
-        .click()
+        .get('mat-header-row')
+        .within(() => {
+            cy
+            .get('mat-checkbox')
+            .click()
+        })
+
+        cy.clickMatRaisedButton('Next')
+
+        cy.formControlName('amount', amount.toString())
+
+        cy.clickMatRaisedButton('Add payment')
 
         cy.wait(1000)
+
+        cy.snackBarMessage(`The payment has been added to the folio`)
     }
 }
 

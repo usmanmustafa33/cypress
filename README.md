@@ -5,6 +5,7 @@
 1. Run `npm install`
 2. Create a `cypress.json` file based on `cypress.example.json`
 3. In development run `npx cypress open`
+4. see if you have to change the reservation unit group, rate plan and service in `reservation.spec.ts`
 
 
 ### for jenkins 

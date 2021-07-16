@@ -18,6 +18,18 @@ declare namespace Cypress {
       setDateRangePicker(startDate: moment.Moment, endDate: moment.Moment, position?:  number)
 
       setDateRange(dateDate: moment.Moment, position?:  number)
+
+      formControlName(controlName: string, type: string)
+
+      apaSelectFilterSelect(controlName: string, option: string, selector?: string)
+
+      clickMatButton(buttonString: string)
+
+      clickMatRaisedButton(buttonString: string)
+
+      matMenuItemClick(menuString: string)
+
+      matMenuTriggerClick(menuString: string)
     }
 }
 

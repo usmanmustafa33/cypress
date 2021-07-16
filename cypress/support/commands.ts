@@ -14,7 +14,7 @@ Cypress.Commands.add('login', (email = Cypress.env('email'), pw = Cypress.env('p
     .type(pw)
     .should('have.value', pw)
 
-    return cy.get('.login').submit()
+    return cy.get('.mdl-color--accent').click()
 });
 
 Cypress.Commands.add('navigateToModule', (moduleName: string) => {
@@ -59,7 +59,7 @@ Cypress.Commands.add('getIframeBody', (IframeSelector: string) => {
   })
 
 Cypress.Commands.add('snackBarMessage', (message: string) => {
-    cy.wait(1000);
+    cy.wait(2000);
     
     return cy
     .get('apa-notification-panel')
@@ -85,14 +85,9 @@ Cypress.Commands.add('fillPaymentForm', (buttonText: string, fillPaymentFormInpu
         ...fillPaymentFormInput
     };
 
-    cy.get('input[formcontrolname="holder"]')
-    .type(input.bookerName)
-
-    cy.get('input[formcontrolname="payerEmail"]')
-    .type(input.bookerEmail)
-
+    cy.formControlName('holder', input.bookerName)
+    cy.formControlName('payerEmail', input.bookerEmail)
     cy.matSelectInput('expiryMonth', input.expiryMonth)
-
     cy.matSelectInput('expiryYear', input.expiryYear)
 
     cy.getIframeBody('iframe[id$=--cardNumber]')
@@ -106,6 +101,59 @@ Cypress.Commands.add('fillPaymentForm', (buttonText: string, fillPaymentFormInpu
     .type(input.cardCvv)
 
     return cy.contains(buttonText).click()
+})
+
+Cypress.Commands.add('formControlName', (controlName: string, type: string) => {
+    
+
+    return cy.get(`input[formcontrolname="${controlName}"]`).clear().type(type)
+})
+
+Cypress.Commands.add('apaSelectFilterSelect', (controlName: string, option: string, selector = 'formcontrolname') => {
+
+    return  cy
+            .get(`apa-select-filter[${selector}="${controlName}"]`)
+            .click()
+            .get('mat-option')
+            .contains(option)
+            .click()
+})
+
+Cypress.Commands.add('clickMatButton', (buttonString: string) => {
+    
+
+    return cy
+            .get('.mat-button')
+            .contains(buttonString)
+            .click()
+})
+
+Cypress.Commands.add('clickMatRaisedButton', (buttonString: string) => {
+    
+
+    return cy
+            .get('.mat-raised-button')
+            .contains(buttonString)
+            .click()
+})
+
+
+Cypress.Commands.add('matMenuItemClick', (menuString: string) => {
+    
+
+    return cy
+            .get('.mat-menu-item')
+            .contains(menuString)
+            .click()
+})
+
+Cypress.Commands.add('matMenuTriggerClick', (menuString: string) => {
+    
+
+    return cy
+            .get('.mat-menu-trigger')
+            .contains(menuString)
+            .click()
 })
 
 function selectDate(dateToSelect: Moment) {

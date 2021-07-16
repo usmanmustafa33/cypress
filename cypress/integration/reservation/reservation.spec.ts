@@ -2,42 +2,34 @@ import moment = require("moment");
 import { Reservation } from "./reservation.po";
 
 const reservation = new Reservation();
+const serviceName = 'TEST';
+const reservationUnitGroup = 'Double';
+const reservationRatePlan = 'TESTADD';
 
 context('Apaleo create Reservation', () => {
     const firstName = 'First Name';
     const lastName = (Math.random() + 1).toString(36).substr(2, 9);
 
-    it('Select Reservation', () => {
+    xit('Select Reservation', () => {
         reservation.createReservationWithPayment(
-            "Double",
-            "Non Refundable",
+            reservationUnitGroup,
+            reservationRatePlan,
             { firstName, lastName }
         );
     });
 
-    it('Change prices', () => {
+    xit('Change prices', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Travel dates')
 
-        cy
-        .get('.mat-button')
-        .contains("Change prices")
-        .click()
+        cy.clickMatButton("Change prices")
 
-        cy
-        .get('.mat-button')
-        .contains("Edit multiple prices")
-        .click()
+        cy.clickMatButton("Edit multiple prices")
 
-        cy
-        .get('input[formcontrolname="price"]')
-        .type("100")
+        cy.formControlName('price', "100")
         
-        cy
-        .get('.mat-raised-button')
-        .contains("Edit")
-        .click()
+        cy.clickMatRaisedButton("Edit")
 
         cy.wait(1000)
 
@@ -55,25 +47,17 @@ context('Apaleo create Reservation', () => {
 
         cy.wait(1000)
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Apply changes')
-        .click()
+        cy.clickMatRaisedButton('Apply changes')
 
-        cy
-        .contains('has been amended successfully.')
-
+        cy.contains('has been amended successfully.')
     })
 
-    it('Shorten stay', () => {
+    xit('Shorten stay', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Travel dates')
 
-        cy
-        .get('.mat-button')
-        .contains("Shorten stay")
-        .click()
+        cy.clickMatButton("Shorten stay")
 
         cy
         .get('apa-period-of-stay-time-slice.time-slice')
@@ -85,41 +69,31 @@ context('Apaleo create Reservation', () => {
         .eq(3)
         .click()
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Shorten stay')
-        .click()
+        cy.clickMatRaisedButton('Shorten stay')
 
         cy.contains('has been amended successfully.')
     })
 
-    it('Amend stay', () => {
+    xit('Amend stay', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
         cy.selectTab('Travel dates')
 
-        cy
-        .get('.mat-button')
-        .contains("Amend stay")
-        .click()
+        cy.clickMatButton("Amend stay")
 
-        cy
-        .setDateRange(moment(new Date()).add(1, 'days'), 1)
+        cy.setDateRange(moment(new Date()).add(1, 'days'), 1)
 
-        cy
-        .get('.mat-raised-button')
-        .contains('Search rates')
-        .click()
+        cy.clickMatRaisedButton('Search rates')
 
         // select the given unit group
         cy
         .get('mat-row')
-        .contains('Double')
+        .contains(reservationUnitGroup)
         .click()
 
         // find the given unit group row
         cy
         .get('mat-row')
-        .contains('Double')
+        .contains(reservationUnitGroup)
         .parent()
         .parent()
         .parent()
@@ -129,7 +103,7 @@ context('Apaleo create Reservation', () => {
             cy
             .get('.offer-info')
             .get('.rate-plan-name')
-            .contains('Non Refundable')
+            .contains(reservationRatePlan)
             .parent()
             .parent('tr')
             .within(() => {
@@ -141,51 +115,42 @@ context('Apaleo create Reservation', () => {
             })
         })
 
-        cy
-        .get('.mat-raised-button')
-        .contains("Apply changes")
-        .click()
+        cy.clickMatRaisedButton("Apply changes")
 
         cy.snackBarMessage('has been amended successfully.')
     })
 
-    it('Extras', () => {
+    xit('Extras', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Extras')
 
         cy.wait(1000)
 
-        reservation.addReservationExtras('Breakfast');
+        reservation.addReservationExtras(serviceName);
 
         cy.wait(1000)
 
-        reservation.deleteExtraFromReservation('Breakfast');
+        reservation.deleteExtraFromReservation(serviceName);
     })
 
-    it('Update billing address', () => {
+    xit('Update billing address', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         reservation.updateFolioBillingAddress();
     })
 
-    it('Prepayment notice', () => {
+    xit('Prepayment notice', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Folios')
 
         cy.wait(1000)
 
-        cy
-        .get('.mat-menu-trigger')
-        .contains("Invoices")
-        .click()
-
-        cy
-        .get('.mat-menu-item')
-        .contains("Prepayment notice")
-        .click()
-
+        cy.matMenuTriggerClick("Invoices")
+        
+        cy.matMenuItemClick("Prepayment notice")
+    
         cy
         .get('mat-header-row')
         .within(() => {
@@ -194,106 +159,70 @@ context('Apaleo create Reservation', () => {
             .click()
         })
 
-        cy
-        .get('.mat-button')
-        .contains("Create prepayment notice")
-        .click()
+        cy.clickMatButton("Create prepayment notice")
 
-        cy
-        .get('.mat-menu-trigger')
-        .contains("Download notice")
-        .click()
+        cy.matMenuTriggerClick("Download notice")
 
         cy.wait(3000)
-        cy
-        .get('.mat-menu-trigger')
-        .contains("Download notice")
-        .click()
+        cy.matMenuTriggerClick("Download notice")
 
-        cy
-        .get('.mat-menu-item')
-        .contains("in English")
-        .click()
+        cy.matMenuItemClick("in English")
     })
 
-    it('Create invoice', () => {
+    xit('Create invoice', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Folios')
 
         cy.wait(1000)
 
-        cy
-        .get('.mat-menu-trigger')
-        .contains("Invoices")
-        .click()
+        cy.matMenuTriggerClick("Invoices")
 
-        cy
-        .get('.mat-menu-item')
-        .contains("Create invoice")
-        .click()
+        cy.matMenuItemClick("Create invoice")
 
         cy.wait(1000)
-        cy
-        .get('.mat-menu-trigger')
-        .contains("Download preview")
-        .click()
+        cy.matMenuTriggerClick("Download preview")
 
-        cy
-        .get('.mat-menu-item')
-        .contains("in English")
-        .click()
-
-
-        cy.wait(3000)
-        cy
-        .get('.mat-button')
-        .contains("Add payment")
-        .click()
-        
+        cy.matMenuItemClick("in English")
     })
 
-    it('Add payment, Add Charges and advance invoice', () => {
+    xit('Add Charges', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Folios')
 
-        cy.wait(3000)
+        cy.wait(4000)
 
-        reservation.addChargesToFolio('Breakfast');
+        reservation.addChargesToFolio(serviceName);
+    })
+
+    xit('Add payment, create invoice', () => {
+        reservation.goToReservation(`${firstName} ${lastName}`);
+        cy.selectTab('Folios')
+        cy.wait(4000)
 
         reservation.addPaymentToFolio();
 
-        cy.wait(3000)
+        cy.wait(4000)
+        cy.matMenuTriggerClick("Invoices")
+
+        cy.matMenuItemClick("Create invoice")
 
         cy
-        .get('.mat-menu-trigger')
-        .contains("Invoices")
+        .get('.mat-focus-indicator')
+        .contains("Download preview")
         .click()
 
-        cy
-        .get('.mat-menu-item')
-        .contains("Advance invoice")
-        .click()
 
-        // cy
-        // .get('mat-header-row')
-        // .within(() => {
-        //     cy
-        //     .get('mat-checkbox')
-        //     .click()
-        // })
+        cy.matMenuItemClick("in English")
     })
 
-    it('Assign unit, Check in, Check out', () => {
+    xit('Assign unit, Check in, Check out', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
         
         cy.wait(1000)
 
-        cy
-        .get('.mat-button')
-        .contains("Assign unit")
-        .click()
+        cy.clickMatButton('Assign unit')
 
         cy
         .get('input[data-placeholder="Choose unit"]')
@@ -302,21 +231,11 @@ context('Apaleo create Reservation', () => {
         .eq(0)
         .click()
     
-        cy
-        .get('.mat-raised-button')
-        .contains("Assign")
-        .click()
+        cy.clickMatRaisedButton("Assign")
 
-        cy
-        .get('.mat-button')
-        .contains("Check in")
-        .click()
+        cy.clickMatButton("Check in")
 
-        cy
-        .get('.mat-raised-button')
-        .contains("Check in")
-        .click()
-
+        cy.clickMatRaisedButton("Check in")
     })
 })
 
