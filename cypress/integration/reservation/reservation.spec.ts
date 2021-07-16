@@ -10,7 +10,7 @@ context('Apaleo create Reservation', () => {
     const firstName = 'First Name';
     const lastName = (Math.random() + 1).toString(36).substr(2, 9);
 
-    xit('Select Reservation', () => {
+    it('Select Reservation', () => {
         reservation.createReservationWithPayment(
             reservationUnitGroup,
             reservationRatePlan,
@@ -18,7 +18,7 @@ context('Apaleo create Reservation', () => {
         );
     });
 
-    xit('Change prices', () => {
+    it('Change prices', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Travel dates')
@@ -52,7 +52,7 @@ context('Apaleo create Reservation', () => {
         cy.contains('has been amended successfully.')
     })
 
-    xit('Shorten stay', () => {
+    it('Shorten stay', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Travel dates')
@@ -74,7 +74,7 @@ context('Apaleo create Reservation', () => {
         cy.contains('has been amended successfully.')
     })
 
-    xit('Amend stay', () => {
+    it('Amend stay', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
         cy.selectTab('Travel dates')
 
@@ -120,7 +120,7 @@ context('Apaleo create Reservation', () => {
         cy.snackBarMessage('has been amended successfully.')
     })
 
-    xit('Extras', () => {
+    it('Extras', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Extras')
@@ -134,13 +134,13 @@ context('Apaleo create Reservation', () => {
         reservation.deleteExtraFromReservation(serviceName);
     })
 
-    xit('Update billing address', () => {
+    it('Update billing address', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         reservation.updateFolioBillingAddress();
     })
 
-    xit('Prepayment notice', () => {
+    it('Prepayment notice', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Folios')
@@ -169,7 +169,7 @@ context('Apaleo create Reservation', () => {
         cy.matMenuItemClick("in English")
     })
 
-    xit('Create invoice', () => {
+    it('Create invoice', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Folios')
@@ -186,7 +186,7 @@ context('Apaleo create Reservation', () => {
         cy.matMenuItemClick("in English")
     })
 
-    xit('Add Charges', () => {
+    it('Add Charges', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
 
         cy.selectTab('Folios')
@@ -196,7 +196,7 @@ context('Apaleo create Reservation', () => {
         reservation.addChargesToFolio(serviceName);
     })
 
-    xit('Add payment, create invoice', () => {
+    it('Add payment, create invoice', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
         cy.selectTab('Folios')
         cy.wait(4000)
@@ -217,7 +217,7 @@ context('Apaleo create Reservation', () => {
         cy.matMenuItemClick("in English")
     })
 
-    xit('Assign unit, Check in, Check out', () => {
+    it('Assign unit, Check in, Check out', () => {
         reservation.goToReservation(`${firstName} ${lastName}`);
         
         cy.wait(1000)
