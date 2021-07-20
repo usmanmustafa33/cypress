@@ -1,6 +1,8 @@
 {
     "chromeWebSecurity": false,
     "projectId": "projectId",
+    "viewportWidth": 1500,
+    "viewportHeight": 800,
     "env": {
         "loginURL":"https://identity.apaleo-staging.com/Account/Login",
         "email": "email",

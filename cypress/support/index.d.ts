@@ -1,9 +1,9 @@
 
 declare namespace Cypress {
     interface Chainable {
-      login(email?: string, pw?: string): Cypress.Chainable<Element>
+      login(email?: string, pw?: string): Chainable<Element>
 
-      navigateToModule(moduleName: string): Cypress.Chainable<Element>
+      navigateToModule(moduleName: string): Chainable<Element>
 
       selectTab(selectTab: string): Chainable<Element>
 

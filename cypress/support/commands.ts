@@ -18,17 +18,17 @@ Cypress.Commands.add('login', (email = Cypress.env('email'), pw = Cypress.env('p
 });
 
 Cypress.Commands.add('navigateToModule', (moduleName: string) => {
-    cy.get('.sidenav-content').click()
-
+    cy
+    .get('.sidenav-content')
+    .click()
+    
     cy.get('mat-select[aria-label="Context"]')
     .click()
     .get('mat-option')
     .contains(Cypress.env('selectedHotel'))
     .click()
 
-    cy.get('apa-menu-item').contains(moduleName).click()
-
-    return cy.get('mat-sidenav-container').click({ multiple: true })
+    return cy.get('apa-menu-item').contains(moduleName).click();
 });
 
 Cypress.Commands.add('selectTab', (tabName: string) => {
@@ -59,7 +59,6 @@ Cypress.Commands.add('getIframeBody', (IframeSelector: string) => {
   })
 
 Cypress.Commands.add('snackBarMessage', (message: string) => {
-    cy.wait(2000);
     
     return cy
     .get('apa-notification-panel')
@@ -100,7 +99,12 @@ Cypress.Commands.add('fillPaymentForm', (buttonText: string, fillPaymentFormInpu
     .click()
     .type(input.cardCvv)
 
-    return cy.contains(buttonText).click()
+    cy.intercept('POST' ,'https://pay.sandbox.datatrans.com/upp/payment/SecureFields/paymentField').as('paymentField')
+    cy.intercept('PUT', 'https://payment.apaleo-staging.com/payment/v0-nsfw/payment-actions/create-account').as('createAccount')
+
+    cy.contains(buttonText).click()
+
+    return cy.wait(['@paymentField', '@createAccount'])
 })
 
 Cypress.Commands.add('formControlName', (controlName: string, type: string) => {
